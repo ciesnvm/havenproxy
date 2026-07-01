@@ -647,13 +647,13 @@ html, body {
   position: absolute;
   left: 50%;
   top: -4rem;
-  width: 24rem;
-  height: 24rem;
+  width: 12rem;
+  height: 12rem;
   transform: translateX(-50%);
   border-radius: 50%;
   background: #a855f7;
-  filter: blur(110px);
-  opacity: .45;
+  filter: blur(150px);
+  opacity: .50;
 }
 .lamp-rays {
   position: relative;
