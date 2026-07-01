@@ -322,13 +322,17 @@ html, body {
 .magic-badge {
   display: inline-flex;
   align-items: center;
-  border: 1px solid hsl(var(--border));
+  border: 1px solid transparent;
   border-radius: 9999px;
   padding: 0.3rem 0.9rem;
   font-size: 0.75rem;
-  font-weight: 500;
-  color: hsl(var(--muted-foreground));
-  background: hsl(var(--accent) / 0.4);
+  font-weight: 600;
+  color: #e5e5ea;
+  background: #0a0a0d;
+  box-shadow:
+    0 0 0 1px rgba(124, 108, 246, .55),
+    0 0 10px 1px rgba(124, 108, 246, .45),
+    0 0 24px 4px rgba(129, 91, 246, .25);
 }
 
 /* ============ Bento grid ============ */
@@ -606,19 +610,27 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  border-radius: 1.5rem;
   overflow: hidden;
-  min-height: 480px;
-  justify-content: flex-end;
-  background: #050505;
+  background: hsl(var(--background));
+}
+.lamp-visual {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, white 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, white 55%, transparent 100%);
+}
+@media (min-width: 768px) {
+  .lamp-visual { height: 300px; }
 }
 .lamp-glow-left, .lamp-glow-right {
   position: absolute;
-  top: 6rem;
-  width: 30rem;
-  height: 22rem;
+  top: 0;
+  width: 42rem;
+  height: 26rem;
   background: conic-gradient(from 70deg at center top, #a855f7, transparent, transparent);
-  filter: blur(40px);
+  filter: blur(48px);
 }
 .lamp-glow-left { left: 0; -webkit-mask-image: linear-gradient(to right, white, transparent); mask-image: linear-gradient(to right, white, transparent); }
 .lamp-glow-right {
@@ -629,22 +641,40 @@ html, body {
 }
 .lamp-glow-center {
   position: absolute;
-  top: 10.5rem;
-  width: 16rem;
-  height: 16rem;
+  left: 50%;
+  top: -2rem;
+  width: 20rem;
+  height: 20rem;
+  transform: translateX(-50%);
   border-radius: 50%;
   background: #a855f7;
-  filter: blur(90px);
-  opacity: .55;
+  filter: blur(100px);
+  opacity: .5;
 }
 .lamp-line {
   position: absolute;
-  top: 12.5rem;
-  width: 22rem;
+  left: 50%;
+  top: 1.5rem;
+  width: 24rem;
   height: 2px;
-  background: #d8b4fe;
-  filter: blur(1px);
-  box-shadow: 0 0 40px 6px #a855f7;
+  transform: translateX(-50%);
+  background: #e9d5ff;
+  filter: blur(0.5px);
+  box-shadow: 0 0 30px 4px #c084fc, 0 0 80px 20px rgba(168,85,247,.5);
+}
+.lamp-blinds {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60rem;
+  height: 26rem;
+  clip-path: polygon(48.5% 0%, 51.5% 0%, 100% 100%, 0% 100%);
+  background-image: repeating-linear-gradient(to right, transparent 0 20px, rgba(0,0,0,.4) 20px 22px);
+  -webkit-mask-image: linear-gradient(to bottom, white 10%, transparent 90%);
+  mask-image: linear-gradient(to bottom, white 10%, transparent 90%);
+  opacity: .6;
+  pointer-events: none;
 }
 
 /* ============ Footer ============ */
