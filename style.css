@@ -627,34 +627,49 @@ html, body {
   background: hsl(var(--background));
   padding-top: 3.5rem;
 }
+
 .lamp-glow-left, .lamp-glow-right {
   position: absolute;
-  top: 0;
+  top: 3.5rem; /* Align exactly with the horizontal line position */
   width: 44rem;
   height: 30rem;
-  background: conic-gradient(from 70deg at center top, #a855f7, transparent, transparent);
-  filter: blur(90px);
+  filter: blur(40px); /* Reduced blur to keep the sharp, premium beam shape from Untitled.jpg */
   opacity: .8;
+  
+  /* CRITICAL FIX: Sharp-clip the top edge at 0px to prevent leaking above the line, */
+  /* while using negative values on sides/bottom to let the blur spread naturally. */
+  clip-path: inset(0px -50rem -50rem -50rem);
 }
-.lamp-glow-left { left: 0; -webkit-mask-image: linear-gradient(to right, white, transparent); mask-image: linear-gradient(to right, white, transparent); }
-.lamp-glow-right {
-  right: 0;
-  background: conic-gradient(from 290deg at center top, transparent, transparent, #a855f7);
+
+.lamp-glow-left {
+  left: 50%;
+  margin-left: -34rem; /* Aligns the apex of the conic gradient with the left edge of the 24rem line */
+  background: conic-gradient(from 70deg at center top, #a855f7, transparent, transparent);
   -webkit-mask-image: linear-gradient(to left, white, transparent);
-  mask-image: linear-gradient(to left, white, transparent);
+  mask-image: linear-gradient(to left, white, transparent); /* Brightest in center, fades out to the left side */
 }
+
+.lamp-glow-right {
+  left: 50%;
+  margin-left: -10rem; /* Aligns the apex of the conic gradient with the right edge of the 24rem line */
+  background: conic-gradient(from 290deg at center top, transparent, transparent, #a855f7);
+  -webkit-mask-image: linear-gradient(to right, white, transparent);
+  mask-image: linear-gradient(to right, white, transparent); /* Brightest in center, fades out to the right side */
+}
+
 .lamp-glow-center {
   position: absolute;
   left: 50%;
-  top: -4rem;
-  width: 24rem;
-  height: 24rem;
+  top: 3.5rem; /* Align exactly with the horizontal line position */
+  width: 24rem; /* Matches the exact width of the line line */
+  height: 16rem;
   transform: translateX(-50%);
-  border-radius: 50%;
-  background: #a855f7;
-  filter: blur(110px);
-  opacity: .45;
+  background: linear-gradient(to bottom, #a855f7, transparent);
+  filter: blur(50px);
+  opacity: .6;
+  clip-path: inset(0px -50rem -50rem -50rem); /* Prevents the ambient center backing from leaking upwards */
 }
+
 .lamp-rays {
   position: relative;
   width: 100%;
@@ -664,6 +679,7 @@ html, body {
   mask-image: linear-gradient(to bottom, white 0%, white 40%, transparent 100%);
   pointer-events: none;
 }
+
 .lamp-line {
   position: absolute;
   left: 50%;
@@ -675,6 +691,7 @@ html, body {
   filter: blur(0.5px);
   box-shadow: 0 0 30px 4px #c084fc, 0 0 80px 20px rgba(168,85,247,.5);
 }
+
 .lamp-blinds {
   position: absolute;
   top: 0;
