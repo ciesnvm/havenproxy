@@ -651,7 +651,7 @@ html.lenis, html.lenis body {
 }
 .lamp-glow-left, .lamp-glow-right {
   position: absolute;
-  top: 0;
+  top: 1;
   width: 44rem;
   height: 30rem;
   background: conic-gradient(from 70deg at center top, #a855f7, transparent, transparent);
@@ -668,7 +668,7 @@ html.lenis, html.lenis body {
 .lamp-glow-center {
   position: absolute;
   left: 50%;
-  top: -4rem;
+  top: 0rem;
   width: 12rem;
   height: 12rem;
   transform: translateX(-50%);
