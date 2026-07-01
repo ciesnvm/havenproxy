@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HavenProxy — Enterprise proxy infrastructure that just works</title>
+<meta name="description" content="Route, rotate, and monitor proxy traffic with HavenProxy. Residential, datacenter, and mobile IPs, unified in one dashboard." />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@500,600,700,1&display=swap">
+
+<!-- Tailwind CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          background: 'hsl(var(--background))',
+          foreground: 'hsl(var(--foreground))',
+          card: 'hsl(var(--card))',
+          border: 'hsl(var(--border))',
+          muted: 'hsl(var(--muted))',
+          'muted-foreground': 'hsl(var(--muted-foreground))',
+          accent: 'hsl(var(--accent))',
+          primary: 'hsl(var(--primary))',
+          'primary-foreground': 'hsl(var(--primary-foreground))',
+        },
+        fontFamily: {
+          sans: ['Inter', 'sans-serif'],
+          heading: ['"General Sans"', 'Inter', 'sans-serif'],
+        },
+        maxWidth: { '7xl': '80rem' },
+      }
+    }
+  }
+</script>
+
+<!-- Icons -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg-background text-foreground font-sans antialiased overflow-x-hidden">
+
+<!-- ============ NAVBAR ============ -->
+<header id="navbar" class="sticky top-0 inset-x-0 h-16 w-full border-b border-transparent z-[999] transition-colors duration-300">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8 h-full flex items-center justify-between">
+    <div class="flex items-center gap-10">
+      <a href="#home" class="flex items-center gap-2 shrink-0">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="28" height="28" rx="7" fill="url(#logoGrad)"/>
+          <path d="M9 7v14M9 14h6.5a3.5 3.5 0 0 0 0-7H14" stroke="#050506" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M19 14v7" stroke="#050506" stroke-width="2.1" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="logoGrad" x1="0" y1="0" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#c084fc"/>
+              <stop offset="1" stop-color="#e879f9"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <span class="text-lg font-heading font-semibold tracking-tight">havenproxy</span>
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-1">
+        <div class="relative group">
+          <button class="nav-link flex items-center gap-1">
+            Features
+            <i data-lucide="chevron-down" class="w-3.5 h-3.5 opacity-60 transition-transform duration-200 group-hover:rotate-180"></i>
+          </button>
+          <div class="dropdown-panel grid-cols-[.8fr_1fr] w-[520px]">
+            <a href="#features" class="dropdown-hero">
+              <h6 class="text-base font-medium mb-1">All Features</h6>
+              <p class="text-sm text-muted-foreground">Endpoints, rotation, analytics, and more.</p>
+            </a>
+            <div class="grid grid-cols-1 gap-1 p-2">
+              <a href="#" class="dropdown-item">
+                <i data-lucide="globe" class="w-4 h-4"></i>
+                <div>
+                  <h6>Proxy Endpoints</h6>
+                  <p>Spin up rotating endpoints in seconds.</p>
+                </div>
+              </a>
+              <a href="#" class="dropdown-item">
+                <i data-lucide="shield-check" class="w-4 h-4"></i>
+                <div>
+                  <h6>IP Whitelisting</h6>
+                  <p>Lock endpoints down to trusted networks.</p>
+                </div>
+              </a>
+              <a href="#" class="dropdown-item">
+                <i data-lucide="line-chart" class="w-4 h-4"></i>
+                <div>
+                  <h6>Traffic Analytics</h6>
+                  <p>See exactly where every request goes.</p>
+                </div>
+              </a>
+              <a href="#" class="dropdown-item">
+                <i data-lucide="shuffle" class="w-4 h-4"></i>
+                <div>
+                  <h6>Rotation Rules</h6>
+                  <p>Control session length and geo-targeting.</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <a href="#pricing" class="nav-link">Pricing</a>
+        <a href="#" class="nav-link">Enterprise</a>
+
+        <div class="relative group">
+          <button class="nav-link flex items-center gap-1">
+            Resources
+            <i data-lucide="chevron-down" class="w-3.5 h-3.5 opacity-60 transition-transform duration-200 group-hover:rotate-180"></i>
+          </button>
+          <div class="dropdown-panel grid-cols-2 w-[380px]">
+            <a href="#" class="dropdown-item">
+              <i data-lucide="newspaper" class="w-4 h-4"></i>
+              <div>
+                <h6>Blog</h6>
+                <p>Notes on proxies, scraping &amp; scale.</p>
+              </div>
+            </a>
+            <a href="#" class="dropdown-item">
+              <i data-lucide="help-circle" class="w-4 h-4"></i>
+              <div>
+                <h6>Help Center</h6>
+                <p>Get answers to your questions.</p>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <a href="#" class="nav-link">Changelog</a>
+      </nav>
+    </div>
+
+    <div class="hidden lg:flex items-center gap-2">
+      <a href="#" class="btn btn-ghost btn-sm">Sign In</a>
+      <a href="#" class="btn btn-primary btn-sm">
+        Get Started
+        <i data-lucide="zap" class="w-3.5 h-3.5 ml-1.5 text-orange-500 fill-orange-500"></i>
+      </a>
+    </div>
+
+    <button id="mobile-menu-btn" class="lg:hidden p-2 -mr-2" aria-label="Toggle menu">
+      <i data-lucide="menu" class="w-6 h-6"></i>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div id="mobile-menu" class="mobile-menu">
+    <div class="flex flex-col gap-1 p-6">
+      <a href="#features" class="mobile-link">Features</a>
+      <a href="#pricing" class="mobile-link">Pricing</a>
+      <a href="#" class="mobile-link">Enterprise</a>
+      <a href="#" class="mobile-link">Resources</a>
+      <a href="#" class="mobile-link">Changelog</a>
+      <div class="h-px bg-border my-3"></div>
+      <a href="#" class="btn btn-ghost w-full justify-center">Sign In</a>
+      <a href="#" class="btn btn-primary w-full justify-center mt-2">Get Started</a>
+    </div>
+  </div>
+</header>
+
+<main class="overflow-x-hidden">
+
+  <!-- ============ HERO ============ -->
+  <section id="home" class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="flex flex-col items-center justify-center w-full text-center pt-16 md:pt-24">
+      <div data-animate class="flex flex-col items-center w-full text-center">
+        <button class="shine-badge">
+          <span class="shine-spark"></span>
+          <span class="shine-backdrop"></span>
+          <span class="relative z-10 py-0.5 text-sm text-neutral-100 flex items-center justify-center gap-1.5 px-4">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+            Infrastructure trusted by scraping &amp; automation teams
+            <i data-lucide="arrow-right" class="w-3 h-3 transition-transform duration-300 group-hover:translate-x-0.5"></i>
+          </span>
+        </button>
+
+        <h1 class="text-center py-6 text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-heading font-medium !leading-[1.1] tracking-tight max-w-4xl">
+          Enterprise-grade
+          <span class="text-transparent bg-gradient-to-r from-violet-400 via-fuchsia-400 to-violet-400 bg-clip-text">proxy</span>
+          infrastructure for serious traffic
+        </h1>
+
+        <p class="mb-10 text-lg md:text-xl text-muted-foreground max-w-2xl text-balance">
+          Route, rotate, and monitor every request with HavenProxy.
+          <br class="hidden md:block" />
+          <span class="hidden md:block">Residential, datacenter, and mobile IPs, unified in one dashboard.</span>
+        </p>
+
+        <div class="flex items-center justify-center gap-4">
+          <a href="#pricing" class="btn btn-primary btn-lg">
+            Start routing for free
+            <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+          </a>
+        </div>
+      </div>
+
+      <div data-animate data-delay="200" class="relative pt-16 pb-16 md:py-28 px-2 w-full">
+        <div class="hero-glow"></div>
+        <div class="relative -m-2 rounded-xl p-2 ring-1 ring-inset ring-white/10 lg:-m-4 lg:rounded-2xl bg-black/40 backdrop-blur-3xl overflow-hidden">
+          <div class="border-beam"></div>
+          <div class="dashboard-mock">
+            <div class="dashboard-mock-topbar">
+              <div class="flex gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-neutral-700"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-neutral-700"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-neutral-700"></span>
+              </div>
+              <div class="text-xs text-neutral-500 font-mono">app.havenproxy.io/dashboard</div>
+              <div class="w-12"></div>
+            </div>
+            <div class="dashboard-mock-body">
+              <div class="dashboard-sidebar">
+                <div class="dashboard-sidebar-item active"><i data-lucide="layout-grid" class="w-4 h-4"></i>Overview</div>
+                <div class="dashboard-sidebar-item"><i data-lucide="globe" class="w-4 h-4"></i>Endpoints</div>
+                <div class="dashboard-sidebar-item"><i data-lucide="line-chart" class="w-4 h-4"></i>Analytics</div>
+                <div class="dashboard-sidebar-item"><i data-lucide="settings" class="w-4 h-4"></i>Settings</div>
+              </div>
+              <div class="dashboard-main">
+                <div class="dashboard-stat-row">
+                  <div class="dashboard-stat"><span class="label">Active endpoints</span><span class="value">128</span></div>
+                  <div class="dashboard-stat"><span class="label">Success rate</span><span class="value">99.7%</span></div>
+                  <div class="dashboard-stat"><span class="label">Avg latency</span><span class="value">84ms</span></div>
+                </div>
+                <div class="dashboard-chart">
+                  <svg viewBox="0 0 400 120" preserveAspectRatio="none" class="w-full h-full">
+                    <polyline points="0,90 40,70 80,80 120,50 160,60 200,30 240,45 280,20 320,35 360,10 400,25" fill="none" stroke="url(#chartGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                      <linearGradient id="chartGrad" x1="0" y1="0" x2="400" y2="0">
+                        <stop stop-color="#a78bfa"/>
+                        <stop offset="1" stop-color="#e879f9"/>
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="absolute -bottom-4 inset-x-0 w-full h-1/2 bg-gradient-to-t from-background z-40 pointer-events-none"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TRUSTED BY ============ -->
+  <section class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div data-animate data-delay="100" class="py-10">
+      <h2 class="text-center text-sm font-medium font-heading text-neutral-500 uppercase tracking-wider">
+        Trusted by teams shipping at scale
+      </h2>
+      <div class="mt-8 logo-marquee-mask">
+        <div class="logo-marquee">
+          <div class="logo-track">
+            <span class="company-logo">Northpeak</span>
+            <span class="company-logo">VertexIO</span>
+            <span class="company-logo">Solstice&nbsp;Labs</span>
+            <span class="company-logo">Anchorline</span>
+            <span class="company-logo">GridWorks</span>
+            <span class="company-logo">Meridian</span>
+          </div>
+          <div class="logo-track" aria-hidden="true">
+            <span class="company-logo">Northpeak</span>
+            <span class="company-logo">VertexIO</span>
+            <span class="company-logo">Solstice&nbsp;Labs</span>
+            <span class="company-logo">Anchorline</span>
+            <span class="company-logo">GridWorks</span>
+            <span class="company-logo">Meridian</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FEATURES / BENTO ============ -->
+  <section id="features" class="max-w-7xl mx-auto px-6 lg:px-8 pt-10">
+    <div data-animate class="flex flex-col items-center justify-center py-8 text-center">
+      <span class="magic-badge">Features</span>
+      <h2 class="text-3xl md:text-5xl !leading-[1.1] font-heading font-medium mt-6">
+        Manage Proxies Like a Pro
+      </h2>
+      <p class="mt-4 text-lg text-muted-foreground max-w-lg">
+        HavenProxy is a powerful proxy management platform that helps you route, rotate, and monitor every request in one place.
+      </p>
+    </div>
+
+    <div data-animate data-delay="200" class="bento-grid py-8">
+      <!-- Card 1 -->
+      <div class="bento-card col-span-3 lg:col-span-1">
+        <div class="bento-bg">
+          <div class="mock-card">
+            <div class="mock-card-title">Create an endpoint</div>
+            <div class="mock-card-desc">Spin up a rotating endpoint in seconds.</div>
+            <label class="mock-label">Target region</label>
+            <div class="mock-input">us-east.havenproxy.io</div>
+          </div>
+        </div>
+        <div class="bento-content">
+          <i data-lucide="globe" class="bento-icon"></i>
+          <h3>Instant proxy endpoints</h3>
+          <p>Create rotating endpoints that are easy to deploy and share across your stack.</p>
+        </div>
+        <div class="bento-cta"><a href="#">Learn more <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i></a></div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="bento-card col-span-3 lg:col-span-2">
+        <div class="bento-bg bento-bg-right">
+          <div class="mock-command">
+            <div class="mock-command-input"><i data-lucide="search" class="w-3.5 h-3.5"></i>Type to search...</div>
+            <div class="mock-command-item">us-east.havenproxy.io:9001</div>
+            <div class="mock-command-item">eu-west.havenproxy.io:9014</div>
+            <div class="mock-command-item">ap-south.havenproxy.io:9032</div>
+            <div class="mock-command-item">sa-east.havenproxy.io:9008</div>
+            <div class="mock-command-item">us-west.havenproxy.io:9021</div>
+          </div>
+        </div>
+        <div class="bento-content">
+          <i data-lucide="search" class="bento-icon"></i>
+          <h3>Search your pool</h3>
+          <p>Quickly find the exact endpoint you need with instant, fuzzy search.</p>
+        </div>
+        <div class="bento-cta"><a href="#">Learn more <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i></a></div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="bento-card col-span-3 lg:col-span-2">
+        <div class="bento-bg bento-bg-full">
+          <div class="integrations-orbit">
+            <div class="orbit-node n1"><i data-lucide="bot"></i></div>
+            <div class="orbit-node n2"><i data-lucide="chrome"></i></div>
+            <div class="orbit-node n3"><i data-lucide="terminal"></i></div>
+            <div class="orbit-node n4"><i data-lucide="database"></i></div>
+            <div class="orbit-node n5"><i data-lucide="code-2"></i></div>
+            <div class="orbit-center"><i data-lucide="shield-check"></i></div>
+          </div>
+        </div>
+        <div class="bento-content">
+          <i data-lucide="waypoints" class="bento-icon"></i>
+          <h3>Connect your stack</h3>
+          <p>Drop HavenProxy into your scrapers, browsers, and automation tools in minutes.</p>
+        </div>
+        <div class="bento-cta"><a href="#">Learn more <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i></a></div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="bento-card col-span-3 lg:col-span-1">
+        <div class="bento-bg">
+          <div class="mock-calendar">
+            <div class="mock-calendar-head">May 2026</div>
+            <div class="mock-calendar-grid">
+              <span></span><span></span><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+              <span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span class="hl">11</span><span>12</span>
+              <span>13</span><span>14</span><span>15</span><span>16</span><span>17</span><span>18</span><span>19</span>
+            </div>
+          </div>
+        </div>
+        <div class="bento-content">
+          <i data-lucide="calendar" class="bento-icon"></i>
+          <h3>Uptime calendar</h3>
+          <p>Keep track of endpoint uptime and incidents with a clean calendar view.</p>
+        </div>
+        <div class="bento-cta"><a href="#">Learn more <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i></a></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROCESS ============ -->
+  <section class="max-w-7xl mx-auto px-6 lg:px-8 py-10">
+    <div data-animate class="flex flex-col items-center justify-center w-full py-8 max-w-xl mx-auto text-center">
+      <span class="magic-badge">The Process</span>
+      <h2 class="text-3xl md:text-5xl !leading-[1.1] font-heading font-medium mt-6">
+        Effortless proxy management in 3 steps
+      </h2>
+      <p class="mt-4 text-lg text-muted-foreground max-w-lg">
+        Follow these simple steps to route, rotate, and scale your traffic with confidence.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full py-8 gap-4 md:gap-8">
+      <div data-animate data-delay="0" class="process-card">
+        <i data-lucide="folder-open" class="process-icon"></i>
+        <span class="process-number">1</span>
+        <h3>Pick your pool</h3>
+        <p>Choose from residential, datacenter, or mobile IPs sorted by region and speed.</p>
+      </div>
+      <div data-animate data-delay="200" class="process-card">
+        <i data-lucide="shuffle" class="process-icon"></i>
+        <span class="process-number">2</span>
+        <h3>Configure &amp; rotate</h3>
+        <p>Set rotation rules, session length, and geo-targeting in just a few clicks.</p>
+      </div>
+      <div data-animate data-delay="400" class="process-card">
+        <i data-lucide="bar-chart-3" class="process-icon"></i>
+        <span class="process-number">3</span>
+        <h3>Monitor &amp; scale</h3>
+        <p>Track latency, success rate, and spend in real time, then scale up instantly.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRICING ============ -->
+  <section id="pricing" class="max-w-7xl mx-auto px-6 lg:px-8 py-10">
+    <div data-animate class="flex flex-col items-center justify-center w-full py-8 max-w-xl mx-auto text-center">
+      <span class="magic-badge">Simple Pricing</span>
+      <h2 class="text-3xl md:text-5xl !leading-[1.1] font-heading font-medium mt-6">
+        Choose a plan that works for you
+      </h2>
+      <p class="mt-4 text-lg text-muted-foreground max-w-lg">
+        Get started with HavenProxy today and unlock more with our pro plans.
+      </p>
+    </div>
+
+    <div data-animate data-delay="200" class="flex flex-col items-center">
+      <div class="pricing-tabs">
+        <button class="pricing-tab active" data-tab="monthly">Monthly</button>
+        <button class="pricing-tab" data-tab="yearly">Yearly</button>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 md:gap-8 w-full max-w-5xl mx-auto pt-8">
+        <!-- Free -->
+        <div class="pricing-card">
+          <div class="pricing-card-head">
+            <h3 class="text-muted-foreground">Free</h3>
+            <p>For individuals &amp; hobby projects</p>
+          </div>
+          <div class="pricing-card-price">
+            <span class="amount" data-monthly="0" data-yearly="0">$0</span>
+            <span class="period">/month</span>
+          </div>
+          <div class="pricing-card-body">
+            <ul>
+              <li><i data-lucide="check-circle" class="w-4 h-4"></i>Rotate IPs on every request</li>
+              <li><i data-lucide="check-circle" class="w-4 h-4"></i>Up to 100 saved targets</li>
+              <li><i data-lucide="check-circle" class="w-4 h-4"></i>Custom endpoint labels</li>
+              <li><i data-lucide="check-circle" class="w-4 h-4"></i>Track usage <span class="tip" title="1K requests / month">(1K req/mo)</span></li>
+              <li><i data-lucide="check-circle" class="w-4 h-4"></i>Community support</li>
+              <li><i data-lucide="check-circle" class="w-4 h-4"></i>AI routing suggestions <span class="tip" title="Up to 100 suggestions">(up to 100)</span></li>
+            </ul>
+          </div>
+          <div class="pricing-card-foot">
+            <a href="#" class="btn btn-outline w-full justify-center">Start for free</a>
+          </div>
+        </div>
+
+        <!-- Pro -->
+        <div class="pricing-card pricing-card-featured">
+          <div class="pricing-badge">Most popular</div>
+          <div class="pricing-card-head featured">
+            <h3>Pro</h3>
+            <p>For small businesses &amp; growing teams</p>
+          </div>
+          <div class="pricing-card-price">
+            <span class="amount" data-monthly="9" data-yearly="95">$9</span>
+            <span class="period">/month</span>
+          </div>
+          <div class="pricing-card-body">
+            <ul>
+              <li><i data-lucide="check-circle" class="w-4 h-4"></i>Rotate IPs on every request</li>
+              <li><i data-lucide="check-circle" class="w-4 h-4"></i>Up to 500 saved targets</li>
+              <li><i data-lucide="check-circle" class="w-4 h-4"></i>Custom endpoint labels</li>
+              <li><i data-lucide="check-circle" class="w-4 h-4"></i>Track usage <span class="tip" title="20K requests / month">(20K req/mo)</span></li>
+              <li><i data-lucide="check-circle" class="w-4 h-4"></i>Export usage logs <span class="tip" title="Up to 1K endpoints">(up to 1K)</span></li>
+              <li><i data-lucide="check-circle" class="w-4 h-4"></i>Priority support <span class="tip" title="24/7 chat support">(24/7 chat)</span></li>
+              <li><i data-lucide="check-circle" class="w-4 h-4"></i>AI routing suggestions <span class="tip" title="Up to 500 suggestions">(up to 500)</span></li>
+            </ul>
+          </div>
+          <div class="pricing-card-foot">
+            <a href="#" class="btn btn-purple w-full justify-center">Get started</a>
+          </div>
+        </div>
+
+        <!-- Business -->
+        <div class="pricing-card">
+          <div class="pricing-card-head">
+            <h3 class="text-muted-foreground">Business</h3>
+            <p>For large organizations</p>
+          </div>
+          <div class="pricing-card-price">
+            <span class="amount" data-monthly="49" data-yearly="517">$49</span>
+            <span class="period">/month</span>
+          </div>
+          <div class="pricing-card-body">
+            <ul>
+              <li><i data-lucide="check-circle" class="w-4 h-4"></i>Rotate IPs on every request</li>
+              <li><i data-lucide="check-circle" class="w-4 h-4"></i>Unlimited saved targets</li>
+              <li><i data-lucide="check-circle" class="w-4 h-4"></i>Custom endpoint labels</li>
+              <li><i data-lucide="check-circle" class="w-4 h-4"></i>Track usage <span class="tip" title="Unlimited requests">(unlimited)</span></li>
+              <li><i data-lucide="check-circle" class="w-4 h-4"></i>Export usage logs <span class="tip" title="Unlimited">(unlimited)</span></li>
+              <li><i data-lucide="check-circle" class="w-4 h-4"></i>Dedicated infra manager</li>
+              <li><i data-lucide="check-circle" class="w-4 h-4"></i>AI routing suggestions <span class="tip" title="Unlimited suggestions">(unlimited)</span></li>
+            </ul>
+          </div>
+          <div class="pricing-card-foot">
+            <a href="#" class="btn btn-outline w-full justify-center">Contact team</a>
+          </div>
+        </div>
+      </div>
+
+      <div data-animate data-delay="300" class="flex items-center justify-center gap-2 mt-12 text-muted-foreground">
+        <i data-lucide="credit-card" class="w-5 h-5"></i>
+        <span>No credit card required</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ REVIEWS ============ -->
+  <section class="max-w-7xl mx-auto px-6 lg:px-8 py-10">
+    <div data-animate class="flex flex-col items-center justify-center w-full py-8 max-w-xl mx-auto text-center">
+      <span class="magic-badge">Our Customers</span>
+      <h2 class="text-3xl md:text-5xl !leading-[1.1] font-heading font-medium mt-6">
+        What our users are saying
+      </h2>
+      <p class="mt-4 text-lg text-muted-foreground max-w-lg">
+        Here's what some of our users have to say about HavenProxy.
+      </p>
+    </div>
+
+    <div class="reviews-grid py-10" id="reviews-grid"></div>
+  </section>
+
+  <!-- ============ CTA / LAMP ============ -->
+  <section class="max-w-7xl mx-auto px-2 md:px-8 mt-10">
+    <div data-animate class="lamp-container">
+      <div class="lamp-glow-left"></div>
+      <div class="lamp-glow-right"></div>
+      <div class="lamp-line"></div>
+      <div class="lamp-glow-center"></div>
+      <div class="relative z-50 flex flex-col items-center justify-center text-center px-6 pb-20 pt-8">
+        <h2 class="text-4xl md:text-7xl !leading-[1.1] font-heading font-medium bg-gradient-to-b from-neutral-200 to-neutral-500 bg-clip-text text-transparent">
+          Step into the future of<br/>network infrastructure
+        </h2>
+        <p class="text-muted-foreground mt-6 max-w-md mx-auto">
+          HavenProxy powers scraping, automation, and QA teams who can't afford downtime. Elevate your stack with infrastructure that just works.
+        </p>
+        <a href="#pricing" class="btn btn-primary btn-lg mt-8">
+          Get started for free
+          <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer-wrap">
+  <div class="footer-notch"></div>
+  <div class="max-w-6xl mx-auto grid gap-10 xl:grid-cols-3 xl:gap-8 w-full px-6">
+    <div class="flex flex-col items-start md:max-w-[220px]">
+      <svg width="30" height="30" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="28" height="28" rx="7" fill="url(#logoGradFooter)"/>
+        <path d="M9 7v14M9 14h6.5a3.5 3.5 0 0 0 0-7H14" stroke="#050506" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M19 14v7" stroke="#050506" stroke-width="2.1" stroke-linecap="round"/>
+        <defs>
+          <linearGradient id="logoGradFooter" x1="0" y1="0" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#c084fc"/><stop offset="1" stop-color="#e879f9"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <p class="text-muted-foreground mt-4 text-sm">Route your traffic with confidence.</p>
+      <span class="mt-4 text-neutral-300 text-sm">© 2026 HavenProxy, Inc.</span>
+    </div>
+
+    <div class="grid grid-cols-2 gap-8 mt-4 xl:col-span-2 xl:mt-0">
+      <div class="md:grid md:grid-cols-2 md:gap-8">
+        <div>
+          <h3>Product</h3>
+          <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#">Testimonials</a></li>
+            <li><a href="#">Integrations</a></li>
+          </ul>
+        </div>
+        <div class="mt-10 md:mt-0">
+          <h3>Integrations</h3>
+          <ul>
+            <li><a href="#">Puppeteer</a></li>
+            <li><a href="#">Playwright</a></li>
+            <li><a href="#">Selenium</a></li>
+            <li><a href="#">Zapier</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="md:grid md:grid-cols-2 md:gap-8">
+        <div>
+          <h3>Resources</h3>
+          <ul>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Changelog</a></li>
+            <li><a href="#">Enterprise</a></li>
+          </ul>
+        </div>
+        <div class="mt-10 md:mt-0">
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="max-w-6xl w-full mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <span>HavenProxy, Inc. All rights reserved.</span>
+      <div class="flex items-center gap-4">
+        <a href="#" aria-label="Twitter"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+        <a href="#" aria-label="GitHub"><i data-lucide="github" class="w-4 h-4"></i></a>
+        <a href="#" aria-label="Discord"><i data-lucide="message-circle" class="w-4 h-4"></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-wordmark">havenproxy</div>
+</footer>
+
+<script src="script.js" defer></script>
+</body>
+</html>
