@@ -320,19 +320,32 @@ html, body {
 
 /* ============ Magic badge ============ */
 .magic-badge {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  border: 1px solid transparent;
   border-radius: 9999px;
   padding: 0.3rem 0.9rem;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #e5e5ea;
+  color: #f2f2f5;
   background: #0a0a0d;
   box-shadow:
-    0 0 0 1px rgba(124, 108, 246, .55),
-    0 0 10px 1px rgba(124, 108, 246, .45),
-    0 0 24px 4px rgba(129, 91, 246, .25);
+    0 0 0 2px #a855f7,
+    0 0 14px 2px rgba(168,85,247,.45),
+    0 0 30px 6px rgba(168,85,247,.2);
+}
+.magic-badge::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(from var(--border-beam-angle), transparent 0%, transparent 75%, #ffffff 85%, #d8b4fe 92%, transparent 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: beamSpin 5s linear infinite;
+  pointer-events: none;
 }
 
 /* ============ Bento grid ============ */
@@ -612,25 +625,16 @@ html, body {
   align-items: center;
   overflow: hidden;
   background: hsl(var(--background));
-}
-.lamp-visual {
-  position: relative;
-  width: 100%;
-  height: 220px;
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(to bottom, white 55%, transparent 100%);
-  mask-image: linear-gradient(to bottom, white 55%, transparent 100%);
-}
-@media (min-width: 768px) {
-  .lamp-visual { height: 300px; }
+  padding-top: 3.5rem;
 }
 .lamp-glow-left, .lamp-glow-right {
   position: absolute;
   top: 0;
-  width: 42rem;
-  height: 26rem;
+  width: 44rem;
+  height: 30rem;
   background: conic-gradient(from 70deg at center top, #a855f7, transparent, transparent);
-  filter: blur(48px);
+  filter: blur(90px);
+  opacity: .8;
 }
 .lamp-glow-left { left: 0; -webkit-mask-image: linear-gradient(to right, white, transparent); mask-image: linear-gradient(to right, white, transparent); }
 .lamp-glow-right {
@@ -642,19 +646,28 @@ html, body {
 .lamp-glow-center {
   position: absolute;
   left: 50%;
-  top: -2rem;
-  width: 20rem;
-  height: 20rem;
+  top: -4rem;
+  width: 24rem;
+  height: 24rem;
   transform: translateX(-50%);
   border-radius: 50%;
   background: #a855f7;
-  filter: blur(100px);
-  opacity: .5;
+  filter: blur(110px);
+  opacity: .45;
+}
+.lamp-rays {
+  position: relative;
+  width: 100%;
+  height: 130px;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, white 0%, white 40%, transparent 100%);
+  mask-image: linear-gradient(to bottom, white 0%, white 40%, transparent 100%);
+  pointer-events: none;
 }
 .lamp-line {
   position: absolute;
   left: 50%;
-  top: 1.5rem;
+  top: 0;
   width: 24rem;
   height: 2px;
   transform: translateX(-50%);
@@ -670,10 +683,10 @@ html, body {
   width: 60rem;
   height: 26rem;
   clip-path: polygon(48.5% 0%, 51.5% 0%, 100% 100%, 0% 100%);
-  background-image: repeating-linear-gradient(to right, transparent 0 20px, rgba(0,0,0,.4) 20px 22px);
-  -webkit-mask-image: linear-gradient(to bottom, white 10%, transparent 90%);
-  mask-image: linear-gradient(to bottom, white 10%, transparent 90%);
-  opacity: .6;
+  background-image: repeating-linear-gradient(to right, transparent 0 24px, rgba(255,255,255,.12) 24px 25px);
+  -webkit-mask-image: linear-gradient(to bottom, white 0%, transparent 75%);
+  mask-image: linear-gradient(to bottom, white 0%, transparent 75%);
+  opacity: .8;
   pointer-events: none;
 }
 
