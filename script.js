@@ -1,3 +1,38 @@
+// ============ Smooth Scrolling (Lenis) ============
+function initLenis() {
+  // Initialize Lenis
+  const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Custom easing function
+    direction: 'vertical',
+    gestureDirection: 'vertical',
+    smoothHandheld: true,
+    smoothMobile: true
+  });
+
+  // Connect Lenis scroll to the browser's requestAnimationFrame
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+
+  // Hook into your existing anchor link scrolling logic to use Lenis's smooth scrolling instead
+  document.querySelectorAll('a[href^="#"]').forEach((a) => {
+    a.addEventListener("click", (e) => {
+      const id = a.getAttribute("href");
+      if (id.length > 1) {
+        const target = document.querySelector(id);
+        if (target) {
+          e.preventDefault();
+          // Use Lenis scroll instance instead of native scrollIntoView
+          lenis.scrollTo(target, { offset: 0, duration: 1.2 });
+        }
+      }
+    });
+  });
+}
+
 // ============ Reviews data ============
 const REVIEWS = [
   { name: "Michael Smith", username: "@michaelsmith", rating: 5, review: "HavenProxy is a lifesaver. Managing and rotating our scraping IPs has never been easier. A must-have for anyone dealing with high request volume." },
@@ -39,6 +74,7 @@ function initNavbarScroll() {
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 }
+
 
 // ============ Mobile menu ============
 function initMobileMenu() {
@@ -121,11 +157,11 @@ function initSmoothAnchors() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  initLenis();
   renderReviews();
   initNavbarScroll();
   initMobileMenu();
   initPricingToggle();
-  initSmoothAnchors();
   initRevealAnimations();
   if (window.lucide) lucide.createIcons();
 });
